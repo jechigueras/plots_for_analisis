@@ -28,20 +28,37 @@ def Radius_values(R,M_BH):
     return SMBH_Star_Coll_rad,Star_Coll_rad, Rt_Full_Star,Rt_Partial_Star
 
 
-#Calculate the max # of bins that have at least 5 points/bin
-def max_bins_count(data, min_per_bin=5):
+#Calculate the max # of bins that have at least 5 points per bin
+def max_bins_binary(data, min_per_bin=5):
+    #Convert data to a numpy array
     data = np.asarray(data)
     n = len(data)
+    
+    #Check if the # of data is less than the minimum
     if n < min_per_bin:
         return 1
     
-    max_possible_bins = n // min_per_bin
-    for bins in reversed(range(1, max_possible_bins + 1)):
-        counts, _ = np.histogram(data, bins=bins)
-        if np.all(counts >= min_per_bin):
-            return bins
+    low = 1
+    high = n // min_per_bin
+    best_bins = 1
+    
+    #Binary search
+    while low <= high:
+        mid = (low + high) // 2
         
-    return 1
+        #Calculate # of points in each bin when bin=mid
+        counts, _ = np.histogram(data, bins=mid)
+        
+        #Check if the # of points in each bin is > 5
+        if np.all(counts >= min_per_bin):
+            #If higher, update the number of bins  
+            best_bins = mid
+            low = mid + 1
+        else:
+            #If lower, use the previus number of bins
+            high = mid - 1
+
+    return best_bins
 
 EVENT_COLORS = {
     'FTDE + No detectable': '#dc143c',     
@@ -144,7 +161,7 @@ for y, lbl, stl in zip(
 ):
     ax_scatter.axvline(x=y, color='black', linestyle=stl, linewidth=2, zorder=order-1, label=lbl)
 
-ax_scatter.set_xscale('log')
+#ax_scatter.set_xscale('log')
 ax_scatter.set_xlabel(r'Initial impact parameter $[au]$')
 ax_scatter.set_ylabel(r'Initial binary phase $[\degree]$')
 ax_scatter.set_yticks([0, 45, 90, 135, 180])
@@ -157,7 +174,7 @@ legend.set_zorder(order)
 for name, group in df_detectable.groupby('event_ID'):
     #Horizontal
     xhist.hist(
-        group['rp2'], bins=max_bins_count(group['rp2']),
+        group['rp2'], bins=max_bins_binary(group['rp2']),
         histtype='step', color=EVENT_COLORS.get(name, 'black'),
         density=True
     )
@@ -168,7 +185,7 @@ for name, group in df_detectable.groupby('event_ID'):
         density=True
     )
 
-xhist.set_xscale('log')
+#xhist.set_xscale('log')
 xhist.set_xticks([])
 yhist.set_yticks([])
 yhist.set_ylim(ax_scatter.get_ylim())
