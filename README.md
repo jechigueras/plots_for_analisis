@@ -2,6 +2,8 @@ This repository is to store plots that I have made for data analisis in my inves
 
 All the plots are designed, in principel, for dataframes but they can be adapted to other files. These are demo plots and use dummy dataframes in order to work. 
 
+---
+
 ## Requirements
 
 To run the scripts, you will need:
@@ -11,6 +13,8 @@ To run the scripts, you will need:
 * matplotlib.gridspec
 * seaborn
 * scipy
+
+---
 
 The dataframes are generated independently in each script using a function called `dummy_df(N,seed)`, with *N* the number of points to generate and *seed* the seed to randomly generate them. Every time you run the file it will give different results. If you don't want that, you can create a single dataframe using the function, just add the line `df.to_csv("path/to/the/dataframe.csv")`, for example, after `df = pd.DataFrame(datos)` and use the generated dataframe in the other scripts.
 
