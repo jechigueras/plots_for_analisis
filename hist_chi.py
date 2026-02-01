@@ -51,34 +51,53 @@ EVENT_COLORS = {
 #Creating dummy dataframe
 #------------------------------------------------------------------------------------------#
 
-#Number of samples
-N = 10000
+def dummy_df(N, seed):
 
-#Initial binary phase
-M1 = np.random.uniform(0,2*np.pi,size = N)
-M1_degrees = np.degrees(M1)
+    #Initial binary phase
+    np.random.seed(seed + 321)
+    M1 = np.random.uniform(0,2*np.pi,size = N)
+    M1_degrees = np.degrees(M1)
 
-#Initial impact parameter
-rp2 = np.random.uniform(0, 1.2, size = N)
+    #Initial impact parameter
+    np.random.seed(seed + 654)
+    rp2 = np.random.uniform(0, 1.2, size = N)
 
-#Event names
-event_ID = (['DP + FTDE']*int(N/8) + ['FTDE + DP']*int(N/8) + 
-            ['Single ejection + Single capture']*int(N/8) + ['Double DP']*int(N/8) + 
-            ['Double FTDE']*int(N/8) + ['Double single capture']*int(N/8) +
-            ['FTDE + PTDE']*int(N/8) + ['Single FTDE + No detectable']*int(N/8))
+    #Random distribution of events
+    np.random.seed(None)
+    events = ['DP + FTDE', 'FTDE + DP', 'Single ejection + Single capture',
+          'Double DP', 'Double FTDE', 'Double single capture', 
+          'FTDE + PTDE', 'Single FTDE + No detectable']
 
-event_ID = random.sample(event_ID, len(event_ID))
+    event_ID = []
+    amount_used = 0
+    for i, name in enumerate(events):
+        #Last event frequency = what is left to reach N
+        if i == len(events) - 1:
+            count = N - amount_used
+        else:
+            #Choose a number between 0 and what if left to reach N
+            remaining = N - amount_used
+            count = np.random.randint(0, remaining + 1) if remaining > 0 else 0
+        
+        occurrence = [name] * count
+        #Avoid the array to be [[],[],[],...]
+        event_ID.extend(occurrence)
+        amount_used += count
 
-datos = {'M1': M1_degrees,
-         'rp2': rp2,
-         'event_ID': event_ID,
-         'Detectable': 'No'
-}
+    datos = {'M1': M1_degrees,
+             'rp2': rp2,
+             'event_ID': event_ID,
+             'Detectable': 'No'
+    }
 
-#Creating the dataframe
-df = pd.DataFrame(datos)
+    #Creating the dataframe
+    df = pd.DataFrame(datos)
+    
+    return df
 
 #------------------------------------------------------------------------------------------#
+
+df = dummy_df(10000, 4123)
 
 #Excluding this events from the dataframe
 df = df[df['event_ID'] != 'Single ejection + Single capture']
