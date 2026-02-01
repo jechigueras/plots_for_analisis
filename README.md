@@ -7,6 +7,7 @@ The dataframes are generated independently in each script using a function calle
 The columns of the dummy dataframes are listed below, along with a brief description:
 
 | Variable name | Description |
+|---------------|-------------|
 | `event_ID`    | String to classify data, thinked to be a final state of a system |
 | `Detectable`  | Characteristic of `event_ID` used to agrupate them |
 | `M1`          | Thinked to be an angle in degrees |
