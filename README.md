@@ -1,6 +1,16 @@
 This repository is to store plots that I have made for data analisis in my investigation or other projects.
 
-All the plots are thinked, in principel, for dataframes but they can be adapted to other files. These are demo plots and use dummy dataframes in order to work. 
+All the plots are designed, in principel, for dataframes but they can be adapted to other files. These are demo plots and use dummy dataframes in order to work. 
+
+## Requirements
+
+To run the scripts, you will need:
+* Python 3.x
+* pandas
+* matplotlib.pyplot
+* matplotlib.gridspec
+* seaborn
+* scipy
 
 The dataframes are generated independently in each script using a function called `dummy_df(N,seed)`, with *N* the number of points to generate and *seed* the seed to randomly generate them. Every time you run the file it will give different results. If you don't want that, you can create a single dataframe using the function, just add the line `df.to_csv("path/to/the/dataframe.csv")`, for example, after `df = pd.DataFrame(datos)` and use the generated dataframe in the other scripts.
 
@@ -10,12 +20,12 @@ The columns of the dummy dataframes are listed below, along with a brief descrip
 |---------------|-------------|
 | `event_ID`    | String to classify data, thinked to be a final state of a system |
 | `Detectable`  | Characteristic of `event_ID` used to agrupate them |
-| `M1`          | Thinked to be an angle in degrees |
+| `M1`          | Intended to represent an angle in degrees |
 | `rp2`         | Float number, can take any positive real value |
 
 You are free to change the columns of the dataframe in any way you like, the table is just a guide to understand his content, and have a sence of why each plot is designed the way it is.
 
-Now I will explain how every code works and what are the outputs.
+Now I will explain how each script works and what are the outputs.
 
 ## `histogram_simulations.py`
 
